@@ -1,0 +1,38 @@
+@startuml
+
+
+left to right direction
+
+    actor Jogador
+    actor Treinador
+    actor Administrador
+
+rectangle "Use Cases" as usecases{
+   usecase "Autenticar no sistema"as US1
+   Jogador --> US1
+   Treinador --> US1
+   Administrador --> US1
+   usecase "Ver/Editar perfil" as US2
+   Jogador --> US2
+   usecase "Ver torneios em que participa" as US3
+   Jogador --> US3
+   usecase "Ver estatisticas pessoais" as US4
+   Jogador --> US4
+   usecase "Criar e gerir equipas" as US5
+   Treinador --> US5
+   usecase "Inscrever a equipa em torneios" as US6
+   Treinador --> US6
+   usecase "Acompanhar torneios" as US7
+   Treinador --> US7
+   usecase "Adicionar e apagar utilizadores" as US8
+   Administrador --> US8
+   usecase "Criar e gerir torneios" as US9
+   Administrador --> US9
+   usecase "Agendar partidas entre equipas inscritas" as US10
+   Administrador --> US10
+   usecase "Registar resultado de partidas e atualizar classificacao" as US11
+   Administrador --> US11
+   usecase "Acompanhar resultados de torneios" as US12
+   Jogador --> US12
+   }
+@enduml

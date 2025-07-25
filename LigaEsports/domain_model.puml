@@ -1,0 +1,88 @@
+    @startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+package "Domain Model" {
+    abstract class Player{
+    id : Double
+    name : String
+    nickName : String
+    numero_partidas : int
+    vitorias : int
+    derrotas : int
+    }
+
+    class PlayerFPS extends Player{
+    precisao : double
+    headshots : int
+    }
+    class PlayerMOBA extends Player{
+    personagem : String
+    kills : int
+    deaths : int
+    assists : int
+    }
+    class PlayerEFootball extends Player{
+    posicao : String
+    gols : int
+    assistencias : int
+    defesas : int
+    }
+
+    class Team{
+    id : Double
+    name : String
+    players : List<Player>
+    vitorias : int
+    derrotas : int
+    }
+
+    class Treinador{
+    id : Double
+    name : String
+    email : String
+    teams : Team
+    }
+
+    class Administrador{
+    id : Double
+    name : String
+    email : String
+    }
+
+    class Torneio{
+    id : Double
+    name : String
+    teams : List<Team>
+    game : List<Game>
+    partidas : List<Partida>
+    classificacao : List<Team>
+    }
+
+    class Game{
+    name : String
+    }
+
+    class Partida{
+    id : Double
+    team1 : Team
+    team2 : Team
+    resultado : String
+    data : Date
+}
+
+Team "1" --> "*" Player : has
+
+Treinador "1" --> "*" Team : manages
+Administrador "1" --> "*" Torneio : oversees
+
+Torneio "1" -- "*" Team : includes
+Torneio "1" -- "*" Game : features
+Torneio "1" -- "*" Partida : consists of
+
+Partida "1" -- "2" Team : involves
+
+}
+
+@enduml
