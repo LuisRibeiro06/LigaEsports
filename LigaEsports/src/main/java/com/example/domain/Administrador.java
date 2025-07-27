@@ -3,7 +3,7 @@ package com.example.domain;
 import java.io.Serializable;
 import java.util.random.RandomGenerator;
 
-public class Administrador implements Serializable {
+public class Administrador extends Utilizador implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Double id;
@@ -42,6 +42,11 @@ public class Administrador implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public Role getRole() {
+        return Role.ADMIN;
     }
 
     @Override

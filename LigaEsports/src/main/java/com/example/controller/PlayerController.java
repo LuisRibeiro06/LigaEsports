@@ -1,9 +1,11 @@
 package com.example.controller;
 
+import com.example.DTO.TorneioDTO;
+import com.example.Mapper.TorneioMapper;
 import com.example.domain.Player;
-import com.example.domain.Team;
 import com.example.domain.Torneio;
 import com.example.service.PlayerService;
+import com.example.service.TorneioService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,9 +16,11 @@ import java.util.List;
 public class PlayerController {
 
     private final PlayerService playerService;
+    private final TorneioService torneioService;
 
-    public PlayerController(PlayerService playerService) {
+    public PlayerController(PlayerService playerService, TorneioService TorneioService) {
         this.playerService = playerService;
+        this.torneioService = TorneioService;
     }
 
     @GetMapping
@@ -30,22 +34,31 @@ public class PlayerController {
     }
 
     @DeleteMapping("/{id}")
-    public void apagar(@PathVariable Long id) {
+    public void apagar(@PathVariable Double id) {
         playerService.apagar(id);
     }
 
     @GetMapping("/{id}/perfil")
-    public Player verPerfil(@PathVariable Long id) { }
+    public Player verPerfil(@PathVariable Double id) {
+        return playerService.getById(id).orElse(null);
+    }
 
     @PutMapping("/{id}/perfil")
-    public Player editarPerfil(@PathVariable Long id, @RequestBody Player atualizado) { }
+    public Player editarPerfil(@PathVariable Double id, @RequestBody Player atualizado) {
+        atualizado.setId(id);
+        playerService.atualizarPerfil(atualizado);
+        return playerService.getById(id).orElse(null);
+    }
 
     @GetMapping("/{id}/torneios")
-    public List<Torneio> listarTorneiosDoJogador(@PathVariable Long id) { }
+    public List<TorneioDTO> listarTorneiosDoJogador(@PathVariable Double id) {
+        List<Torneio> torneios = torneioService.getTorneiosDoJogador(id);
+        return torneios.stream().map(TorneioMapper::toDTO).toList();
+    }
 
     @GetMapping("/{id}/estatisticas")
-    public List<String> getEstatisticas(@PathVariable Long id) { }
+    public List<String> getEstatisticas(@PathVariable Double id) {
+        return playerService.getEstatisticas(id);
+    }
 
-    @GetMapping("/{id}/resultados")
-    public List<Team> acompanharResultados(@PathVariable Long id) { }
 }

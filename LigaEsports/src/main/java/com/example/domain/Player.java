@@ -4,7 +4,7 @@ package com.example.domain;
 import java.io.Serializable;
 import java.util.random.RandomGenerator;
 
-public abstract class Player implements Serializable {
+public class Player extends Utilizador implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Double id;
@@ -43,6 +43,11 @@ public abstract class Player implements Serializable {
         this.id = id;
     }
 
+    @Override
+    public Role getRole() {
+        return Role.PLAYER;
+    }
+
     public String getName() {
         return name;
     }
@@ -74,6 +79,8 @@ public abstract class Player implements Serializable {
     public void setNum_losses(int num_losses) {
         this.num_losses = num_losses;
     }
+
+
 
     @Override
     public String toString() {

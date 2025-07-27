@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.random.RandomGenerator;
 
-public class Treinador implements Serializable {
+public class Treinador extends Utilizador implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Double id;
@@ -47,6 +47,11 @@ public class Treinador implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public Role getRole() {
+        return Role.TREINADOR;
     }
 
     public Team getTeam() {
