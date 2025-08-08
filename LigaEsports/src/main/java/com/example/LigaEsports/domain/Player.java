@@ -96,4 +96,6 @@ public abstract class Player extends Utilizador implements Serializable {
                 ", num_losses=" + num_losses +
                 '}';
     }
+
+
 }

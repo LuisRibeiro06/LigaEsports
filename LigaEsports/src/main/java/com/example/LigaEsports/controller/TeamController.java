@@ -5,6 +5,7 @@ import com.example.LigaEsports.domain.Team;
 import com.example.LigaEsports.service.TeamService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -18,8 +19,13 @@ public class TeamController {
         this.teamService = teamService;
     }
 
+    @GetMapping("/jogadores/sem-equipa")
+    public List<Player> listarJogadoresSemEquipa() {
+        return teamService.listarJogadoresSemEquipa();
+    }
+
     @PostMapping
-    public Team criarEquipa(@PathVariable("treinadorId") UUID treinadorId, @RequestBody String nomeEquipa) {
+    public Team criarEquipa(@PathVariable UUID treinadorId, @RequestBody String nomeEquipa) {
         return teamService.criarEquipa(treinadorId, nomeEquipa);
     }
 

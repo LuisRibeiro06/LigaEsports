@@ -1,10 +1,9 @@
 package com.example.LigaEsports.service;
 
-import com.example.LigaEsports.domain.Player;
-import com.example.LigaEsports.domain.Team;
-import com.example.LigaEsports.domain.Treinador;
+import com.example.LigaEsports.domain.*;
 import com.example.LigaEsports.repository.TeamRepository;
 import com.example.LigaEsports.repository.UtilizadorRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,18 +13,99 @@ import java.util.UUID;
 @Service
 public class TeamService {
 
-    private final TeamRepository repo = new TeamRepository();
-    private final UtilizadorRepository utilizadorRepo = new UtilizadorRepository();
+    private final TeamRepository repo;
+    private final UtilizadorRepository utilizadorRepo;
 
+    @Autowired
+    public TeamService(TeamRepository repo, UtilizadorRepository utilizadorRepo) {
+        this.repo = repo;
+        this.utilizadorRepo = utilizadorRepo;
+    }
+    
     public List<Team> listarTodas() {
         return repo.listarTodas();
     }
 
+
+    public void apagar(UUID id) {
+        repo.apagar(id);
+    }
+
+    public List<Player> listarJogadoresSemEquipa() {
+        List<Team> teams = listarTodas();
+
+        List<Player> jogadoresComEquipa = teams.stream()
+                .flatMap(t -> t.getPlayers().stream())
+                .toList();
+
+        // 2. Todos os jogadores do sistema
+        List<Player> todosJogadores = utilizadorRepo.getAllPlayers();
+
+        // 3. Filtrar para excluir quem já está em alguma equipa
+        return todosJogadores.stream()
+                .filter(p -> !jogadoresComEquipa.contains(p)) // não está em equipa nenhuma
+                .toList();
+    }
+
+
+    public void atualizarEstatisticasEquipa(Partida partida) {
+        Team team1 = partida.getTeam1();
+        Team team2 = partida.getTeam2();
+        String resultado = partida.getResultado();
+
+        if (resultado == null || resultado.isEmpty() || resultado.equalsIgnoreCase("pendente")) return;
+
+        String[] placares = resultado.split("-");
+        if (placares.length != 2) return;
+
+        int score1 = Integer.parseInt(placares[0].trim());
+        int score2 = Integer.parseInt(placares[1].trim());
+
+
+        if (score1 == score2) {
+            // empate
+        } else if (score1 > score2) {
+            team1.setVitorias(team1.getVitorias() + 1);
+            team2.setDerrotas(team2.getDerrotas() + 1);
+        } else {
+            team2.setVitorias(team2.getVitorias() + 1);
+            team1.setDerrotas(team1.getDerrotas() + 1);
+        }
+
+        repo.salvar(team1);
+        repo.salvar(team2);
+    }
+
+    //usar para caso seja alterado um resultado já existente
+    public void reverterEstatisticas(Partida partida) {
+        String resultadoAntigo = partida.getResultado();
+        if (resultadoAntigo == null || resultadoAntigo.isEmpty() || resultadoAntigo.equalsIgnoreCase("pendente")) return;
+
+        String[] placares = resultadoAntigo.split("-");
+        if (placares.length != 2) return;
+
+        int score1 = Integer.parseInt(placares[0].trim());
+        int score2 = Integer.parseInt(placares[1].trim());
+
+        Team team1 = partida.getTeam1();
+        Team team2 = partida.getTeam2();
+
+        if (score1 == score2) {
+            // empate
+        } else if (score1 > score2) {
+            team1.setVitorias(team1.getVitorias() - 1);
+            team2.setDerrotas(team2.getDerrotas() - 1);
+        } else {
+            team2.setVitorias(team2.getVitorias() - 1);
+            team1.setDerrotas(team1.getDerrotas() - 1);
+        }
+    }
+
+
     public Team criarEquipa(UUID treinadorId, String nomeEquipa) {
         try {
             Treinador treinador = utilizadorRepo.getTreinadorById(treinadorId);
-            Team equipa = new Team(nomeEquipa);
-            equipa.setTreinador(treinador);
+            Team equipa = new Team(nomeEquipa, treinador);
             repo.salvar(equipa);
             return equipa;
         } catch (RuntimeException e) {
@@ -34,12 +114,11 @@ public class TeamService {
     }
 
     public void editarNomeEquipa(UUID equipaId, String novoNome) {
-        Optional<Team> optionalTeam = repo.getById(equipaId);
-        if (optionalTeam.isEmpty()) {
+        Team equipa = repo.getById(equipaId);
+        if (equipa == null) {
             throw new RuntimeException("Equipa não encontrada");
         }
 
-        Team equipa = optionalTeam.get();
         equipa.setNome(novoNome);
         repo.salvar(equipa);
     }

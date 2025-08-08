@@ -1,6 +1,7 @@
 package com.example.LigaEsports.DTO;
 
 import com.example.LigaEsports.domain.Game;
+import com.example.LigaEsports.domain.Position;
 import com.example.LigaEsports.domain.Role;
 
 public class UtilizadorDTO {
@@ -10,6 +11,7 @@ public class UtilizadorDTO {
     public String password;
     public Role role;
     public Game game;
+    public Position position;
 
     public UtilizadorDTO() {}
 
@@ -59,5 +61,12 @@ public class UtilizadorDTO {
 
     public void setGame(Game game) {
         this.game = game;
+    }
+
+    public Position getPosition() {
+        return position;
+    }
+    public void setPosition(Position position) {
+        this.position = position;
     }
 }

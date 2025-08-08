@@ -2,19 +2,23 @@ package com.example.LigaEsports.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 import java.util.random.RandomGenerator;
 
 public class Partida implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private Double id;
+    private UUID id;
     private Team team1;
+    private List<Player> playersTeam1;
     private Team team2;
+    private List<Player> playersTeam2;
     private String resultado;
     private Date data;
 
-    public Partida(Double id, Team team1, Team team2, String resultado, Date data) {
-        this.id = id;
+    public Partida(Team team1, Team team2, String resultado, Date data) {
+        this.id = UUID.randomUUID();
         this.team1 = team1;
         this.team2 = team2;
         this.resultado = resultado;
@@ -22,14 +26,14 @@ public class Partida implements Serializable {
     }
 
     public Partida() {
-        this.id = RandomGenerator.getDefault().nextDouble();
+        this.id = UUID.randomUUID();
     }
 
-    public Double getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Double id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -63,6 +67,22 @@ public class Partida implements Serializable {
 
     public void setData(Date data) {
         this.data = data;
+    }
+
+    public List<Player> getPlayersTeam1() {
+        return playersTeam1;
+    }
+
+    public void setPlayersTeam1(List<Player> playersTeam1) {
+        this.playersTeam1 = playersTeam1;
+    }
+
+    public List<Player> getPlayersTeam2() {
+        return playersTeam2;
+    }
+
+    public void setPlayersTeam2(List<Player> playersTeam2) {
+        this.playersTeam2 = playersTeam2;
     }
 
     @Override

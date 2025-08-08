@@ -6,11 +6,13 @@ public class TorneioDTO {
     private UUID id;
     private String nome;
     private int numEquipas;
+    private String game;
 
-    public TorneioDTO(UUID id, String nome, int numEquipas) {
+    public TorneioDTO(UUID id, String nome, int numEquipas, String game) {
         this.id = id;
         this.nome = nome;
         this.numEquipas = numEquipas;
+        this.game = game;
     }
 
     public UUID getId() {
@@ -36,4 +38,13 @@ public class TorneioDTO {
     public void setNumEquipas(int numEquipas) {
         this.numEquipas = numEquipas;
     }
+
+    public String getGame() {
+        return game;
+    }
+
+    public void setGame(String game) {
+        this.game = game;
+    }
 }
+

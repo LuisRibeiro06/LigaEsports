@@ -5,12 +5,14 @@ import com.example.LigaEsports.domain.Player;
 import com.example.LigaEsports.domain.Treinador;
 import com.example.LigaEsports.domain.Utilizador;
 import jakarta.annotation.PostConstruct;
+import org.springframework.stereotype.Repository;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Repository
 public class UtilizadorRepository {
 
     private static final String FILE_NAME = "utilizadores.ser";

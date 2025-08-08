@@ -3,6 +3,7 @@ package com.example.LigaEsports.domain;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.random.RandomGenerator;
 
@@ -53,6 +54,10 @@ public class Torneio implements Serializable {
         return teams;
     }
 
+    public void addTeam(Team team) {
+        this.teams.add(team);
+    }
+
     public void setTeams(List<Team> teams) {
         this.teams = teams;
     }
@@ -67,6 +72,10 @@ public class Torneio implements Serializable {
 
     public List<Partida> getPartidas() {
         return partidas;
+    }
+
+    public void addPartida(Partida partida) {
+        this.partidas.add(partida);
     }
 
     public void setPartidas(List<Partida> partidas) {

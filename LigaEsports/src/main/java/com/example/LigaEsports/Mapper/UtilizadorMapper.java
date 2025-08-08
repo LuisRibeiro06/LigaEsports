@@ -22,7 +22,7 @@ public class UtilizadorMapper {
 
                 yield switch (dto.game) {
                     case FPS -> new PlayerFPS(dto.nome, dto.email, dto.username, dto.password);
-                    case MOGA -> new PlayerMOGA(dto.nome, dto.email, dto.username, dto.password);
+                    case MOBA -> new PlayerMOBA(dto.nome, dto.email, dto.username, dto.password);
                     case EFOOTBALL -> new PlayerEFootball(dto.nome, dto.email, dto.username, dto.password);
                 };
             }

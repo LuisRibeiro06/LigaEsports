@@ -3,6 +3,7 @@ package com.example.LigaEsports.domain;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Team implements Serializable {
@@ -24,9 +25,10 @@ public class Team implements Serializable {
         this.derrotas = 0;
     }
 
-    public Team(String nome) {
+    public Team(String nome, Treinador treinador) {
         this.id = UUID.randomUUID();
         this.nome = nome;
+        this.treinador = treinador;
         this.players = new ArrayList<>();
         this.vitorias = 0;
         this.derrotas = 0;
@@ -94,5 +96,17 @@ public class Team implements Serializable {
                 ", vitorias=" + vitorias +
                 ", derrotas=" + derrotas +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Team team = (Team) o;
+        return Objects.equals(id, team.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

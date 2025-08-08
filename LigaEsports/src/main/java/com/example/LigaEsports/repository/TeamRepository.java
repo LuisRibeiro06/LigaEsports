@@ -2,6 +2,7 @@ package com.example.LigaEsports.repository;
 
 import com.example.LigaEsports.domain.Player;
 import com.example.LigaEsports.domain.Team;
+import org.springframework.stereotype.Repository;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Repository
 public class TeamRepository {
 
     private static final String FILE_NAME = "teams.ser";
@@ -18,8 +20,8 @@ public class TeamRepository {
         this.teams = carregarDados();
     }
 
-    public Optional<Team> getById(UUID id) {
-        return Optional.ofNullable(teams.stream().filter(t -> t.getId().equals(id)).findFirst().orElse(null));
+    public Team getById(UUID id) {
+        return teams.stream().filter(t -> t.getId().equals(id)).findFirst().orElse(null);
     }
 
     public Optional<Team> getByTreinadorId(UUID id) {
@@ -42,7 +44,7 @@ public class TeamRepository {
 
     public void adicionarJogador(UUID equipaId, Player jogador) {
         Team team = teams.stream().filter(t -> t.getId().equals(equipaId)).findFirst().orElse(null);
-        if (team != null) {
+        if (team != null && jogador != null && !team.getPlayers().contains(jogador)) {
             team.getPlayers().add(jogador);
             salvarDados();
         }

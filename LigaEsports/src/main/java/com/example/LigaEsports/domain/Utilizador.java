@@ -1,6 +1,7 @@
 package com.example.LigaEsports.domain;
 
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.random.RandomGenerator;
 
@@ -70,4 +71,16 @@ public abstract class Utilizador implements Serializable {
     }
 
     public abstract Role getRole();
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Utilizador that = (Utilizador) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 }

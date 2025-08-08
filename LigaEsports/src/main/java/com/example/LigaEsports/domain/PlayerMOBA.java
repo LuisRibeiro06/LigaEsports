@@ -2,7 +2,7 @@ package com.example.LigaEsports.domain;
 
 import java.io.Serializable;
 
-public class PlayerMOGA extends Player implements Serializable {
+public class PlayerMOBA extends Player implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String personagem;
@@ -12,7 +12,7 @@ public class PlayerMOGA extends Player implements Serializable {
     private int num_assists;
 
 
-    public PlayerMOGA(String name, String email,String username, String password) {
+    public PlayerMOBA(String name, String email, String username, String password) {
         super(name, email,username, password);
         this.personagem = DEFAULT_PERSONAGEM;
         this.num_kills = 0;
@@ -20,11 +20,11 @@ public class PlayerMOGA extends Player implements Serializable {
         this.num_assists = 0;
     }
 
-    public PlayerMOGA(Double id, String name) {
+    public PlayerMOBA(Double id, String name) {
         super(name);
     }
 
-    public PlayerMOGA() {
+    public PlayerMOBA() {
         super();
         this.personagem = DEFAULT_PERSONAGEM;
         this.num_kills = 0;
@@ -34,7 +34,7 @@ public class PlayerMOGA extends Player implements Serializable {
 
     @Override
     public Game getGame() {
-        return Game.MOGA;
+        return Game.MOBA;
     }
 
 

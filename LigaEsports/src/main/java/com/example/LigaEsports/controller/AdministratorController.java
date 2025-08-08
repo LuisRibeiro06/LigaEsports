@@ -1,6 +1,10 @@
 package com.example.LigaEsports.controller;
 
+import com.example.LigaEsports.DTO.PartidaDTO;
+import com.example.LigaEsports.DTO.ResultadoDTO;
+import com.example.LigaEsports.DTO.TorneioDTO;
 import com.example.LigaEsports.DTO.UtilizadorDTO;
+import com.example.LigaEsports.Mapper.TorneioMapper;
 import com.example.LigaEsports.Mapper.UtilizadorMapper;
 import com.example.LigaEsports.domain.Partida;
 import com.example.LigaEsports.domain.Torneio;
@@ -17,13 +21,13 @@ import java.util.UUID;
 //@CrossOrigin(origins = "http://localhost:5176")
 public class AdministratorController {
 
-  private final UtilizadorService utilizadorService;
-  private final TorneioService torneioService;
+    private final UtilizadorService utilizadorService;
+    private final TorneioService torneioService;
 
-  public AdministratorController(UtilizadorService utilizadorService, TorneioService torneioService) {
-    this.utilizadorService = utilizadorService;
-    this.torneioService = torneioService;
-  }
+    public AdministratorController(UtilizadorService utilizadorService, TorneioService torneioService) {
+        this.utilizadorService = utilizadorService;
+        this.torneioService = torneioService;
+    }
 
     @GetMapping("/utilizadores")
     public List<Utilizador> listarTodos() {
@@ -63,12 +67,13 @@ public class AdministratorController {
     }
 
     @PostMapping("/torneios/{torneioId}/partidas")
-    public void agendarPartida(@PathVariable UUID torneioId, @RequestBody Partida partida) {
+    public void agendarPartida(@PathVariable UUID torneioId, @RequestBody PartidaDTO partida) {
         torneioService.agendarPartida(torneioId, partida);
     }
 
+
     @PutMapping("/partidas/{id}")
-    public void alterarResultado(@PathVariable UUID id, @RequestBody Partida atualizado) {
+    public void alterarResultado(@PathVariable UUID id, @RequestBody ResultadoDTO atualizado) {
         torneioService.alterarResultado(id, atualizado);
     }
 

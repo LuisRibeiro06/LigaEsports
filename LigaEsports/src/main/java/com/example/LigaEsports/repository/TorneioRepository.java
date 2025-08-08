@@ -1,13 +1,16 @@
 package com.example.LigaEsports.repository;
 
 import com.example.LigaEsports.domain.Torneio;
+import org.springframework.stereotype.Repository;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Stream;
 
+@Repository
 public class TorneioRepository {
 
     private static final String FILE_NAME = "torneios.ser";
@@ -18,7 +21,9 @@ public class TorneioRepository {
     }
 
     public void salvar(Torneio t) {
-        this.torneios.add(t);
+        if (torneios.stream().noneMatch(torneio -> torneio.getId().equals(t.getId()))) {
+            torneios.add(t);
+        }
         salvarDados();
     }
 
@@ -31,10 +36,11 @@ public class TorneioRepository {
         salvarDados();
     }
 
-    public Optional<Torneio> getById(UUID id) {
+    public Torneio getById(UUID id) {
         return this.torneios.stream()
-                .filter(t -> t.getId().equals(id))
-                .findFirst();
+                .filter(torneio -> torneio.getId().equals(id))
+                .findFirst()
+                .orElse(null);
     }
 
 

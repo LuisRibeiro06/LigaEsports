@@ -7,7 +7,7 @@ public class TorneioMapper {
 
 
     public static TorneioDTO toDTO(Torneio t) {
-        TorneioDTO dto = new TorneioDTO(t.getId(), t.getName(), t.getTeams().size());
+        TorneioDTO dto = new TorneioDTO(t.getId(), t.getName(), t.getTeams().size(), t.getGame().toString());
         return dto;
     }
 
