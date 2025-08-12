@@ -4,13 +4,20 @@ skinparam packageStyle rectangle
 skinparam shadowing false
 
 package "Domain Model" {
-    abstract class Player{
-    id : Double
+
+    abstract class Utilizador{
+    id : UUID
     name : String
-    nickName : String
-    numero_partidas : int
-    vitorias : int
-    derrotas : int
+    email : String
+    username : String
+    password : String
+    + getRole (): Role
+    }
+
+    abstract class Player extends Utilizador{
+    num_games : int
+    num_wins : int
+    num_losses : int
     }
 
     class PlayerFPS extends Player{
@@ -24,55 +31,60 @@ package "Domain Model" {
     assists : int
     }
     class PlayerEFootball extends Player{
-    posicao : String
     gols : int
     assistencias : int
     defesas : int
     }
 
+    enum POSITION{
+    GOALKEEPER
+    DEFENDER
+    MIDFIELDER
+    FORWARD
+    }
+
     class Team{
-    id : Double
+    id : UUID
     name : String
+    treinadorId: UUID
     players : List<Player>
     vitorias : int
     derrotas : int
     }
 
-    class Treinador{
-    id : Double
-    name : String
-    email : String
-    teams : Team
+    class Treinador extends Utilizador{
     }
 
-    class Administrador{
-    id : Double
-    name : String
-    email : String
+    class Administrador extends Utilizador{
     }
 
     class Torneio{
-    id : Double
+    id : UUID
     name : String
     teams : List<Team>
-    game : List<Game>
+    game : Game
     partidas : List<Partida>
     classificacao : List<Team>
     }
 
-    class Game{
-    name : String
+    enum Game{
+    FPS
+    MOBA
+    EFOOTBALL
     }
 
     class Partida{
-    id : Double
+    id : UUID
     team1 : Team
+    playersTeam1 : List<Player>
     team2 : Team
+    playersTeam2 : List<Player>
     resultado : String
     data : Date
 }
 
 Team "1" --> "*" Player : has
+PlayerEFootball "1" --> "1" POSITION : has a
 
 Treinador "1" --> "*" Team : manages
 Administrador "1" --> "*" Torneio : oversees
