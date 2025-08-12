@@ -3,7 +3,15 @@ import axios from 'axios';
 
 export default function UtilizadoresAdmin() {
     const [utilizadores, setUtilizadores] = useState([]);
-    const [novoUtilizador, setNovoUtilizador] = useState({ nome : '', email: '', username: '', password: '', role: 'PLAYER',game: 'FPS'});
+    const [novoUtilizador, setNovoUtilizador] = useState({
+        nome: '',
+        email: '',
+        username: '',
+        password: '',
+        role: 'PLAYER',
+        game: 'FPS',
+        posicao: '' // nova propriedade para FPS
+    });
 
     useEffect(() => {
         carregarUtilizadores();
@@ -21,7 +29,15 @@ export default function UtilizadoresAdmin() {
     const adicionarUtilizador = async () => {
         try {
             await axios.post('http://localhost:8080/api/admin/utilizadores', novoUtilizador);
-            setNovoUtilizador({ nome: '', email: '', username: '', password: '', role: 'PLAYER',game: 'FPS'});
+            setNovoUtilizador({
+                nome: '',
+                email: '',
+                username: '',
+                password: '',
+                role: 'PLAYER',
+                game: 'FPS',
+                posicao: ''
+            });
             carregarUtilizadores();
         } catch (err) {
             console.error('Erro ao adicionar utilizador', err);
@@ -80,20 +96,41 @@ export default function UtilizadoresAdmin() {
                         <option value="PLAYER">Jogador</option>
                         <option value="TREINADOR">Treinador</option>
                     </select>
+
                     {novoUtilizador.role === 'PLAYER' && (
-                        <div className="mt-4">
-                            <label className="block mb-1 text-sm text-gray-700">Jogo</label>
-                            <select
-                                className="border p-2 rounded w-full"
-                                value={novoUtilizador.game || ''}
-                                onChange={(e) => setNovoUtilizador({ ...novoUtilizador, game: e.target.value })}
-                            >
-                                <option value="">-- Escolha o jogo --</option>
-                                <option value="FPS">FPS</option>
-                                <option value="MOBA">MOBA</option>
-                                <option value="EFOOTBALL">eFootball</option>
-                            </select>
-                        </div>
+                        <>
+                            <div>
+                                <label className="block mb-1 text-sm text-gray-700">Jogo</label>
+                                <select
+                                    className="border p-2 rounded w-full"
+                                    value={novoUtilizador.game || ''}
+                                    onChange={(e) => setNovoUtilizador({ ...novoUtilizador, game: e.target.value })}
+                                >
+                                    <option value="">-- Escolha o jogo --</option>
+                                    <option value="FPS">FPS</option>
+                                    <option value="MOBA">MOBA</option>
+                                    <option value="EFOOTBALL">eFootball</option>
+                                </select>
+                            </div>
+
+                            {novoUtilizador.game === 'EFOOTBALL' && (
+                                <div>
+                                    <label className="block mb-1 text-sm text-gray-700">Posição</label>
+                                    <select
+                                        className="border p-2 rounded w-full"
+                                        value={novoUtilizador.posicao || ''}
+                                        onChange={(e) => setNovoUtilizador({ ...novoUtilizador, posicao: e.target.value })}
+                                    >
+                                        <option value="">-- Escolha o posição --</option>
+                                        <option value="GOALKEEPER">GOALKEEPER</option>
+                                        <option value="DEFENDER">DEFENDER</option>
+                                        <option value="MIDFIELDER">MIDFIELDER</option>
+                                        <option value="FORWARD">FORWARD</option>
+                                        ))
+                                    </select>
+                                </div>
+                            )}
+                        </>
                     )}
                 </div>
                 <button

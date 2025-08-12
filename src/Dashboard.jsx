@@ -22,8 +22,17 @@ export default function Dashboard({ utilizador }) {
                 {/* Conteúdo adaptado por tipo de utilizador */}
                 {utilizador.role === 'PLAYER' && (
                     <section>
-                        <h2 className="text-2xl font-bold text-gray-700 mb-4">🎮 Torneios em que participas</h2>
-                        <Torneios jogadorId={utilizador.id} />
+                        <h2 className="text-2xl font-bold text-gray-700 mb-2">🎮 Painel do Jogador</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="bg-white rounded-lg shadow p-4">
+                            <h3 className="text-lg font-semibold text-gray-800">Gerir Perfil</h3>
+                            <p className="text-gray-600">Vê e edita o teu perfil, tal como estatísticas.</p>
+                        </div>
+                        <div className="bg-white rounded-lg shadow p-4">
+                            <h3 className="text-lg font-semibold text-gray-800">Torneios</h3>
+                            <p className="text-gray-600">Visualiza os torneios em que estás inscrito.</p>
+                        </div>
+                        </div>
                     </section>
                 )}
 

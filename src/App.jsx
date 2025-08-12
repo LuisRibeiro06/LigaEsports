@@ -10,6 +10,9 @@ import { useNavigate } from 'react-router-dom';
 import EquipaTreinador from "./EquipaTreinador.jsx";
 import InscricaoTorneio from "./InscricaoTorneio.jsx";
 import ClassificacaoTorneio from "./ClassificacaoTorneio.jsx";
+import AgendarPartida from "./AgendarPartida.jsx";
+import RegistarResultado from "./RegistarResultado.jsx";
+import PerfilJogador from "./PerfilJogador.jsx";
 
 function App() {
 
@@ -26,11 +29,19 @@ function App() {
                             <Route path="/dashboard" element={<Dashboard utilizador={utilizador} />} />
                             <Route path="/gestao-utilizadores" element={<UtilizadoresAdmin />} />
                             <Route path="/gestao-torneios" element={<TorneiosAdmin />} />
+                            <Route path="/agendar-partida" element={<AgendarPartida />} />
+                            <Route path="/registar-resultado" element={<RegistarResultado />} />
                             {utilizador.role === 'TREINADOR' && (
                                 <>
                                     <Route path="/equipa" element={<EquipaTreinador treinadorId={utilizador.id} />}/>
                                     <Route path="/inscricoes" element={<InscricaoTorneio treinadorId={utilizador.id} />}/>
                                     <Route path="/classificacao" element={<ClassificacaoTorneio treinadorId={utilizador.id} />} />
+                                </>
+                            )}
+                            {utilizador.role === 'PLAYER' && (
+                                <>
+                                <Route path="/meu-perfil" element={<PerfilJogador jogadorId={utilizador.id} />} />
+                                <Route path="/meus-torneios" element={<Torneios jogadorId={utilizador.id} />} />
                                 </>
                             )}
                         </Routes>
