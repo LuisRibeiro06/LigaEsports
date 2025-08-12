@@ -32,6 +32,7 @@ public class Treinador extends Utilizador implements Serializable {
         this.email = email;
     }
 
+
     @Override
     public Role getRole() {
         return Role.TREINADOR;
@@ -46,4 +47,6 @@ public class Treinador extends Utilizador implements Serializable {
                 ", email='" + email + '\'' +
                 '}';
     }
+
+
 }

@@ -124,12 +124,10 @@ public class TorneioService {
             throw new IllegalArgumentException("Torneio não encontrado.");
         }
 
-        System.out.println("Torneio ID: " + torneioId);
-        System.out.println("Equipas inscritas no torneio:");
+
         torneio.getTeams().forEach(t -> System.out.println(t.getId()));
 
-        System.out.println("Equipe 1 no pedido: " + team1.getId());
-        System.out.println("Equipe 2 no pedido: " + team2.getId());
+
 
         if (!torneio.getTeams().contains(team1) || !torneio.getTeams().contains(team2)) {
             throw new IllegalArgumentException("Ambas as equipas devem estar inscritas no torneio.");
@@ -280,6 +278,11 @@ public class TorneioService {
                 .filter(t -> !t.getTeams().stream().anyMatch(e -> e.getId().equals(equipaId)))
                 .toList();
     }
+
+    public List<Partida> getPartidasDoJogadorNoTorneio(UUID playerId, UUID torneioId) {
+        return repo.getById(torneioId).getPartidas().stream().filter(p -> p.getPlayersTeam1().stream().anyMatch(j -> j.getId().equals(playerId)) || p.getPlayersTeam2().stream().anyMatch(j -> j.getId().equals(playerId))).toList();
+    }
+
 
     public void salvar(Torneio t) {
         repo.salvar(t);

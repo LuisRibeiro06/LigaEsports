@@ -25,7 +25,7 @@ public class TeamRepository {
     }
 
     public Optional<Team> getByTreinadorId(UUID id) {
-        return teams.stream().filter(t -> t.getTreinador() != null && t.getTreinador().getId().equals(id)).findFirst();
+        return teams.stream().filter(t -> t.getTreinador() != null && t.getTreinador().equals(id)).findFirst();
     }
 
     public void salvar(Team t) {

@@ -1,6 +1,7 @@
 package com.example.LigaEsports.domain;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class PlayerEFootball extends Player implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -73,5 +74,12 @@ public class PlayerEFootball extends Player implements Serializable {
     @Override
     public Game getGame() {
         return Game.EFOOTBALL;
+    }
+
+    @Override
+    public List<String> getStatistics() {
+        return List.of("Golos : "+ this.num_goals,
+                "Assistencias : "+ this.num_assists,
+                "Defesas : "+ this.num_saves);
     }
 }

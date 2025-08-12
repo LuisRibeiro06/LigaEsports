@@ -1,11 +1,9 @@
 package com.example.LigaEsports.service;
 
 import com.example.LigaEsports.DTO.EstatisticaJogadorDTO;
-import com.example.LigaEsports.domain.Player;
-import com.example.LigaEsports.domain.PlayerEFootball;
-import com.example.LigaEsports.domain.PlayerFPS;
-import com.example.LigaEsports.domain.PlayerMOBA;
+import com.example.LigaEsports.domain.*;
 import com.example.LigaEsports.repository.PlayerRepository;
+import com.example.LigaEsports.repository.TeamRepository;
 import com.example.LigaEsports.repository.UtilizadorRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,20 +13,25 @@ import java.util.UUID;
 
 @Service
 public class PlayerService {
+    private final UtilizadorRepository utilizadorRepo;
+    private final TeamRepository teamRepository;
 
-    private final PlayerRepository repo = new PlayerRepository();
-    private final UtilizadorRepository utilizadorRepo = new UtilizadorRepository();
+
+    public PlayerService(UtilizadorRepository utilizadorRepo, TeamRepository teamRepository) {
+        this.utilizadorRepo = utilizadorRepo;
+        this.teamRepository = teamRepository;
+    }
 
     public List<Player> listar() {
         return utilizadorRepo.getAllPlayers();
     }
 
     public void salvar(Player p) {
-        repo.salvar(p);
+        utilizadorRepo.salvar(p);
     }
 
     public Optional<Player> getById(UUID id) {
-        return repo.listarTodos().stream()
+        return listar().stream()
                 .filter(p -> p.getId().equals(id))
                 .findFirst();
     }
@@ -39,7 +42,7 @@ public class PlayerService {
     }
 
     public void apagar(UUID id) {
-        repo.remover(id);
+        utilizadorRepo.remover(id);
     }
 
     public void atualizarEstatisticasDoJogador(EstatisticaJogadorDTO dto) {
@@ -77,11 +80,20 @@ public class PlayerService {
     }
 
     public List<String> getEstatisticas(UUID id) {
-        Optional<Player> p = getById(id);
-        return p.map(player -> List.of(
-                "Partidas: " + player.getNum_games(),
-                "Vitórias: " + player.getNum_wins(),
-                "Derrotas: " + player.getNum_losses()
-        )).orElse(List.of("Jogador não encontrado"));
+        Player jogador = utilizadorRepo.getPlayerById(id);
+        if (jogador == null) {
+            throw new RuntimeException("Jogador nao encontrado");
+        }
+
+        List<String> stats = jogador.getStatistics();
+        stats.add(jogador.toString());
+        return stats;
     }
+
+    public Optional<Team> getEquipaDoJogador(UUID playerId) {
+        return teamRepository.listarTodas().stream()
+                .filter(team -> team.getPlayers().stream().anyMatch(p -> p.getId().equals(playerId)))
+                .findFirst();
+    }
+
 }

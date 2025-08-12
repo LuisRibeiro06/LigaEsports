@@ -1,11 +1,18 @@
 package com.example.LigaEsports.controller;
 
+import com.example.LigaEsports.DTO.PlayerCreateDTO;
+import com.example.LigaEsports.DTO.PlayerResponseDTO;
+import com.example.LigaEsports.DTO.PlayerUpdateDTO;
 import com.example.LigaEsports.DTO.TorneioDTO;
+import com.example.LigaEsports.Mapper.PlayerMapper;
 import com.example.LigaEsports.Mapper.TorneioMapper;
+import com.example.LigaEsports.domain.Partida;
 import com.example.LigaEsports.domain.Player;
+import com.example.LigaEsports.domain.Team;
 import com.example.LigaEsports.domain.Torneio;
 import com.example.LigaEsports.service.PlayerService;
 import com.example.LigaEsports.service.TorneioService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,37 +25,42 @@ public class PlayerController {
 
     private final PlayerService playerService;
     private final TorneioService torneioService;
+    private final PlayerMapper playerMapper;
 
-    public PlayerController(PlayerService playerService, TorneioService TorneioService) {
+    public PlayerController(PlayerService playerService, TorneioService TorneioService, PlayerMapper playerMapper) {
         this.playerService = playerService;
         this.torneioService = TorneioService;
+        this.playerMapper = playerMapper;
     }
 
     @GetMapping
-    public List<Player> listar() {
-        return playerService.listar();
-    }
-
-    @PostMapping
-    public void criar(@RequestBody Player jogador) {
-        playerService.salvar(jogador);
-    }
-
-    @DeleteMapping("/{id}")
-    public void apagar(@PathVariable UUID id) {
-        playerService.apagar(id);
+    public List<PlayerResponseDTO> listar() {
+        List<Player> players = playerService.listar();
+        return players.stream()
+                .map(playerMapper::toResponseDTO)
+                .toList();
     }
 
     @GetMapping("/{id}/perfil")
-    public Player verPerfil(@PathVariable UUID id) {
-        return playerService.getById(id).orElse(null);
+    public PlayerResponseDTO verPerfil(@PathVariable UUID id) {
+        return playerService.getById(id)
+                .map(playerMapper::toResponseDTO)
+                .orElse(null);
     }
 
     @PutMapping("/{id}/perfil")
-    public Player editarPerfil(@PathVariable UUID id, @RequestBody Player atualizado) {
-        atualizado.setId(id);
-        playerService.atualizarPerfil(atualizado);
-        return playerService.getById(id).orElse(null);
+    public PlayerResponseDTO editarPerfil(@PathVariable UUID id, @Valid @RequestBody PlayerUpdateDTO playerUpdateDTO) {
+        Player existingPlayer = playerService.getById(id)
+                .orElseThrow(() -> new RuntimeException("Jogador não encontrado"));
+
+        Player playerToUpdate = playerMapper.updateFromDTO(existingPlayer, playerUpdateDTO);
+        playerToUpdate.setId(id);
+
+        playerService.atualizarPerfil(playerToUpdate);
+
+        return playerService.getById(id)
+                .map(playerMapper::toResponseDTO)
+                .orElse(null);
     }
 
     @GetMapping("/{id}/torneios")
@@ -57,9 +69,23 @@ public class PlayerController {
         return torneios.stream().map(TorneioMapper::toDTO).toList();
     }
 
+    @GetMapping("/{id}/equipa")
+    public Team getEquipaDoJogador(@PathVariable UUID id) {
+        return playerService.getEquipaDoJogador(id).orElse(null);
+    }
+
+
     @GetMapping("/{id}/estatisticas")
     public List<String> getEstatisticas(@PathVariable UUID id) {
         return playerService.getEstatisticas(id);
+    }
+
+    @GetMapping("/{playerId}/torneios/{torneioId}/partidas")
+    public List<Partida> listarPartidasDoJogadorNoTorneio(
+            @PathVariable UUID playerId,
+            @PathVariable UUID torneioId
+    ) {
+        return torneioService.getPartidasDoJogadorNoTorneio(playerId, torneioId);
     }
 
 }

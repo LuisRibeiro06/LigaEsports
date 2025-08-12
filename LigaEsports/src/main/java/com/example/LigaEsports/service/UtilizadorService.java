@@ -4,6 +4,7 @@ import com.example.LigaEsports.domain.Administrador;
 import com.example.LigaEsports.domain.Utilizador;
 import com.example.LigaEsports.repository.UtilizadorRepository;
 import jakarta.annotation.PostConstruct;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,11 +14,15 @@ import java.util.UUID;
 @Service
 public class UtilizadorService {
 
-    private final UtilizadorRepository repo = new UtilizadorRepository();
+    private final UtilizadorRepository repo;
+
+    public UtilizadorService(UtilizadorRepository repo) {
+        this.repo = repo;
+    }
 
     @PostConstruct
     public void init() {
-        if (listarTodos().isEmpty()) {
+        if (listarTodos()==null || listarTodos().isEmpty()) {
             Administrador admin = new Administrador();
             admin.setId(UUID.randomUUID());
             admin.setNome("Admin Principal");
@@ -30,8 +35,6 @@ public class UtilizadorService {
     }
 
     public void salvar(Utilizador u) {
-        // Atualiza se já existir
-        remover(u.getId());
         repo.salvar(u);
     }
 

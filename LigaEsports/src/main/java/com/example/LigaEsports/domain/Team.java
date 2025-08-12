@@ -11,7 +11,7 @@ public class Team implements Serializable {
 
     private UUID id;
     private String nome;
-    private Treinador treinador;
+    private UUID treinadorId;
     private List<Player> players;
     private int vitorias;
     private int derrotas;
@@ -19,7 +19,7 @@ public class Team implements Serializable {
     public Team(String nome, List<Player> players, Treinador treinador) {
         this.id = UUID.randomUUID();
         this.nome = nome;
-        this.treinador = treinador;
+        this.treinadorId = treinador.getId();
         this.players = players;
         this.vitorias = 0;
         this.derrotas = 0;
@@ -28,7 +28,7 @@ public class Team implements Serializable {
     public Team(String nome, Treinador treinador) {
         this.id = UUID.randomUUID();
         this.nome = nome;
-        this.treinador = treinador;
+        this.treinadorId = treinador.getId();
         this.players = new ArrayList<>();
         this.vitorias = 0;
         this.derrotas = 0;
@@ -79,12 +79,12 @@ public class Team implements Serializable {
         this.derrotas = derrotas;
     }
 
-    public Treinador getTreinador() {
-        return treinador;
+    public UUID getTreinador() {
+        return treinadorId;
     }
 
     public void setTreinador(Treinador treinador) {
-        this.treinador = treinador;
+        this.treinadorId = treinador.getId();
     }
 
     @Override

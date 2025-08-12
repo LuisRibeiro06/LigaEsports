@@ -2,6 +2,7 @@ package com.example.LigaEsports.domain;
 
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.UUID;
 import java.util.random.RandomGenerator;
 
@@ -10,14 +11,12 @@ public abstract class Player extends Utilizador implements Serializable {
 
 
     private final String DEFAULT_NAME = "Player";
-    private String username;
     private int num_games;
     private int num_wins;
     private int num_losses;
 
     public Player(String name, String email, String username, String password) {
         super(name, email,username, password);
-        this.username = username;
         this.num_games = 0;
         this.num_wins = 0;
         this.num_losses = 0;
@@ -54,6 +53,9 @@ public abstract class Player extends Utilizador implements Serializable {
     }
 
     public abstract Game getGame();
+
+    public abstract List<String> getStatistics();
+
     public int getNum_games() {
         return num_games;
     }
@@ -90,10 +92,10 @@ public abstract class Player extends Utilizador implements Serializable {
     public String toString() {
         return "Player{" +
                 "id=" + id +
-                ", name='" + super.getNome() + '\'' +
-                ", num_games=" + num_games +
-                ", num_wins=" + num_wins +
-                ", num_losses=" + num_losses +
+                ", Name ='" + super.getNome() + '\'' +
+                ", Games =" + num_games +
+                ", Victorys =" + num_wins +
+                ", Loses =" + num_losses +
                 '}';
     }
 
