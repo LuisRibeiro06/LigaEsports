@@ -46,7 +46,7 @@ public class UtilizadorService {
         return repo.listarTodos();
     }
 
-    public Optional<Utilizador> getById(Double id) {
+    public Optional<Utilizador> getById(UUID id) {
         return listarTodos().stream()
                 .filter(u -> u.getId().equals(id))
                 .findFirst();
