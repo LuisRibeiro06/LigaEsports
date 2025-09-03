@@ -1,8 +1,12 @@
 package com.example.LigaEsports.controller;
 
+import com.example.LigaEsports.DTO.PlayerResponseDTO;
+import com.example.LigaEsports.Mapper.PlayerMapper;
 import com.example.LigaEsports.domain.Player;
 import com.example.LigaEsports.domain.Team;
 import com.example.LigaEsports.service.TeamService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,8 +24,9 @@ public class TeamController {
     }
 
     @GetMapping("/jogadores/sem-equipa")
-    public List<Player> listarJogadoresSemEquipa() {
-        return teamService.listarJogadoresSemEquipa();
+    public ResponseEntity<List<PlayerResponseDTO>> listarJogadoresSemEquipa() {
+        List<Player> players = teamService.listarJogadoresSemEquipa();
+        return ResponseEntity.ok(players.stream().map(PlayerMapper::toResponseDTO).toList());
     }
 
     @PostMapping
@@ -35,18 +40,21 @@ public class TeamController {
     }
 
     @PutMapping("/{equipaId}")
-    public void editarEquipa(@PathVariable UUID equipaId, @RequestBody String nomeEquipa) {
+    public ResponseEntity<Void> editarEquipa(@PathVariable UUID equipaId, @RequestBody String nomeEquipa) {
         teamService.editarNomeEquipa(equipaId, nomeEquipa);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PostMapping("/{equipaId}/adicionar-jogador/{jogadorId}")
-    public void adicionarJogador(@PathVariable UUID equipaId, @PathVariable UUID jogadorId) {
+    public ResponseEntity<Void> adicionarJogador(@PathVariable UUID equipaId, @PathVariable UUID jogadorId) {
         teamService.adicionarJogador(equipaId, jogadorId);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 
     @DeleteMapping("/{equipaId}/remover-jogador/{jogadorId}")
-    public void removerJogador(@PathVariable UUID equipaId, @PathVariable UUID jogadorId) {
+    public ResponseEntity<Void> removerJogador(@PathVariable UUID equipaId, @PathVariable UUID jogadorId) {
         teamService.removerJogador(equipaId, jogadorId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 

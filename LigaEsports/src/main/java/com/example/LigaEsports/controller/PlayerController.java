@@ -1,9 +1,7 @@
 package com.example.LigaEsports.controller;
 
-import com.example.LigaEsports.DTO.PlayerCreateDTO;
-import com.example.LigaEsports.DTO.PlayerResponseDTO;
-import com.example.LigaEsports.DTO.PlayerUpdateDTO;
-import com.example.LigaEsports.DTO.TorneioDTO;
+import com.example.LigaEsports.DTO.*;
+import com.example.LigaEsports.Mapper.PartidaMapper;
 import com.example.LigaEsports.Mapper.PlayerMapper;
 import com.example.LigaEsports.Mapper.TorneioMapper;
 import com.example.LigaEsports.domain.Partida;
@@ -81,11 +79,11 @@ public class PlayerController {
     }
 
     @GetMapping("/{playerId}/torneios/{torneioId}/partidas")
-    public List<Partida> listarPartidasDoJogadorNoTorneio(
+    public List<PartidaDTO> listarPartidasDoJogadorNoTorneio(
             @PathVariable UUID playerId,
             @PathVariable UUID torneioId
     ) {
-        return torneioService.getPartidasDoJogadorNoTorneio(playerId, torneioId);
+        return torneioService.getPartidasDoJogadorNoTorneio(playerId, torneioId).stream().map(PartidaMapper::toDto).toList();
     }
 
 }

@@ -11,8 +11,11 @@ import com.example.LigaEsports.domain.Torneio;
 import com.example.LigaEsports.domain.Utilizador;
 import com.example.LigaEsports.service.TorneioService;
 import com.example.LigaEsports.service.UtilizadorService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,56 +33,78 @@ public class AdministratorController {
     }
 
     @GetMapping("/utilizadores")
-    public List<Utilizador> listarTodos() {
-        return utilizadorService.listarTodos();
+    public ResponseEntity<List<UtilizadorDTO>> listarTodos() {
+        List<Utilizador> utilizadores = utilizadorService.listarTodos();
+        List<UtilizadorDTO> utilizadoresDTO = new ArrayList<>();
+        for (Utilizador u : utilizadores) {
+            utilizadoresDTO.add(UtilizadorMapper.toDTO(u));
+        }
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(utilizadoresDTO);
     }
 
     @PostMapping("/utilizadores")
-    public void adicionarUtilizador(@RequestBody UtilizadorDTO novo) {
+    public ResponseEntity<UtilizadorDTO> adicionarUtilizador(@RequestBody UtilizadorDTO novo) {
         Utilizador utilizador = UtilizadorMapper.criarUtilizador(novo);
         utilizadorService.salvar(utilizador);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(UtilizadorMapper.toDTO(utilizador));
     }
 
+
     @DeleteMapping("/utilizadores/{id}")
-    public void apagarUtilizador(@PathVariable UUID id) {
+    public ResponseEntity<Void> apagarUtilizador(@PathVariable UUID id) {
         utilizadorService.remover(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @GetMapping("/torneios")
-    public List<Torneio> listarTorneios() {
-        return torneioService.listarTodos();
+    public ResponseEntity<List<TorneioDTO>> listarTorneios() {
+        List<Torneio> torneios = torneioService.listarTodos();
+        List<TorneioDTO> torneiosDTO = new ArrayList<>();
+        for (Torneio t : torneios) {
+            torneiosDTO.add(TorneioMapper.toDTO(t));
+        }
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(torneiosDTO);
     }
 
     @PostMapping("/torneios")
-    public void criarTorneio(@RequestBody Torneio torneio) {
+    public ResponseEntity<Void> criarTorneio(@RequestBody Torneio torneio) {
         torneioService.salvar(torneio);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping("/torneios/{id}")
-    public void editarTorneio(@PathVariable UUID id, @RequestBody Torneio atualizado) {
+    public ResponseEntity<Void> editarTorneio(@PathVariable UUID id, @RequestBody Torneio atualizado) {
         atualizado.setId(id);
         torneioService.salvar(atualizado);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @DeleteMapping("/torneios/{id}")
-    public void apagarTorneio(@PathVariable UUID id) {
+    public ResponseEntity<Void> apagarTorneio(@PathVariable UUID id) {
         torneioService.apagar(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PostMapping("/torneios/{torneioId}/partidas")
-    public void agendarPartida(@PathVariable UUID torneioId, @RequestBody PartidaDTO partida) {
+    public ResponseEntity<Void> agendarPartida(@PathVariable UUID torneioId, @RequestBody PartidaDTO partida) {
         torneioService.agendarPartida(torneioId, partida);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
 
     @PutMapping("/partidas/{id}")
-    public void alterarResultado(@PathVariable UUID id, @RequestBody ResultadoDTO atualizado) {
+    public ResponseEntity<Void> alterarResultado(@PathVariable UUID id, @RequestBody ResultadoDTO atualizado) {
         torneioService.alterarResultado(id, atualizado);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @GetMapping("/torneios/{id}/estatisticas")
-    public String verEstatisticas(@PathVariable UUID id) {
-        return torneioService.verEstatisticasTorneio(id);
+    public ResponseEntity<String> verEstatisticas(@PathVariable UUID id) {
+        String estatisticas = torneioService.verEstatisticasTorneio(id);
+        return ResponseEntity.status(HttpStatus.OK).body(estatisticas);
     }
 
 }

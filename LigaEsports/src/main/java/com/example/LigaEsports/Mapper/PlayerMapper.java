@@ -51,7 +51,7 @@ public class PlayerMapper {
         return player;
     }
 
-    public PlayerResponseDTO toResponseDTO(Player player) {
+    public static PlayerResponseDTO toResponseDTO(Player player) {
         PlayerResponseDTO dto = new PlayerResponseDTO();
 
         // Propriedades comuns
