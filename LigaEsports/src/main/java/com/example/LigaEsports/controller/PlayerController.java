@@ -23,26 +23,24 @@ public class PlayerController {
 
     private final PlayerService playerService;
     private final TorneioService torneioService;
-    private final PlayerMapper playerMapper;
 
-    public PlayerController(PlayerService playerService, TorneioService TorneioService, PlayerMapper playerMapper) {
+    public PlayerController(PlayerService playerService, TorneioService TorneioService) {
         this.playerService = playerService;
         this.torneioService = TorneioService;
-        this.playerMapper = playerMapper;
     }
 
     @GetMapping
     public List<PlayerResponseDTO> listar() {
         List<Player> players = playerService.listar();
         return players.stream()
-                .map(playerMapper::toResponseDTO)
+                .map(PlayerMapper::toResponseDTO)
                 .toList();
     }
 
     @GetMapping("/{id}/perfil")
     public PlayerResponseDTO verPerfil(@PathVariable UUID id) {
         return playerService.getById(id)
-                .map(playerMapper::toResponseDTO)
+                .map(PlayerMapper::toResponseDTO)
                 .orElse(null);
     }
 
@@ -51,13 +49,13 @@ public class PlayerController {
         Player existingPlayer = playerService.getById(id)
                 .orElseThrow(() -> new RuntimeException("Jogador não encontrado"));
 
-        Player playerToUpdate = playerMapper.updateFromDTO(existingPlayer, playerUpdateDTO);
+        Player playerToUpdate = PlayerMapper.updateFromDTO(existingPlayer, playerUpdateDTO);
         playerToUpdate.setId(id);
 
         playerService.atualizarPerfil(playerToUpdate);
 
         return playerService.getById(id)
-                .map(playerMapper::toResponseDTO)
+                .map(PlayerMapper::toResponseDTO)
                 .orElse(null);
     }
 

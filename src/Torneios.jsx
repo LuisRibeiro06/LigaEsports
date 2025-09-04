@@ -88,7 +88,7 @@ export default function Torneios({ jogadorId }) {
                         <ul className="list-disc pl-6">
                             {partidas.map((p) => (
                                 <li key={p.id}>
-                                    Resultado : {p.resultado || "Por jogar"} - {p.team1?.nome} vs {p.team2?.nome} — {p.data}
+                                    Resultado : {p.resultado || "Por jogar"} - {p.nomeEquipa1} vs {p.nomeEquipa2} — {p.data}
                                 </li>
                             ))}
                         </ul>

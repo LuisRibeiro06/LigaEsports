@@ -10,7 +10,7 @@ export default function UtilizadoresAdmin() {
         password: '',
         role: 'PLAYER',
         game: 'FPS',
-        posicao: '' // nova propriedade para FPS
+        posicao: ''
     });
 
     useEffect(() => {
@@ -28,7 +28,13 @@ export default function UtilizadoresAdmin() {
 
     const adicionarUtilizador = async () => {
         try {
-            await axios.post('http://localhost:8080/api/admin/utilizadores', novoUtilizador);
+            const res = await axios.post('http://localhost:8080/api/admin/utilizadores', novoUtilizador);
+
+            // adiciona o novo utilizador ao estado local
+            const criado = res.data;
+            setUtilizadores((prev) => [...prev, criado]);
+
+            // limpa o formulário
             setNovoUtilizador({
                 nome: '',
                 email: '',
@@ -38,7 +44,6 @@ export default function UtilizadoresAdmin() {
                 game: 'FPS',
                 posicao: ''
             });
-            carregarUtilizadores();
         } catch (err) {
             console.error('Erro ao adicionar utilizador', err);
         }
@@ -47,7 +52,9 @@ export default function UtilizadoresAdmin() {
     const removerUtilizador = async (id) => {
         try {
             await axios.delete(`http://localhost:8080/api/admin/utilizadores/${id}`);
-            carregarUtilizadores();
+
+            // remove do estado local sem recarregar toda a lista
+            setUtilizadores((prev) => prev.filter((u) => u.id !== id));
         } catch (err) {
             console.error('Erro ao remover utilizador', err);
         }
@@ -57,6 +64,7 @@ export default function UtilizadoresAdmin() {
         <div className="space-y-8">
             <h1 className="text-2xl font-bold text-gray-800">Gestão de Utilizadores</h1>
 
+            {/* Formulário de criação */}
             <div className="bg-white p-6 rounded shadow">
                 <h2 className="text-lg font-semibold mb-4">Criar Novo Utilizador</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -121,12 +129,11 @@ export default function UtilizadoresAdmin() {
                                         value={novoUtilizador.posicao || ''}
                                         onChange={(e) => setNovoUtilizador({ ...novoUtilizador, posicao: e.target.value })}
                                     >
-                                        <option value="">-- Escolha o posição --</option>
+                                        <option value="">-- Escolha a posição --</option>
                                         <option value="GOALKEEPER">GOALKEEPER</option>
                                         <option value="DEFENDER">DEFENDER</option>
                                         <option value="MIDFIELDER">MIDFIELDER</option>
                                         <option value="FORWARD">FORWARD</option>
-                                        ))
                                     </select>
                                 </div>
                             )}
@@ -141,6 +148,7 @@ export default function UtilizadoresAdmin() {
                 </button>
             </div>
 
+            {/* Lista de utilizadores */}
             <div className="bg-white p-6 rounded shadow">
                 <h2 className="text-lg font-semibold mb-4">Lista de Utilizadores</h2>
                 <table className="w-full text-left">

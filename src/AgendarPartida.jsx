@@ -89,7 +89,7 @@ export default function AgendarPartida() {
 
             <select value={selectedTorneio} onChange={e => setSelectedTorneio(e.target.value)} className="border p-2 w-full mb-4">
                 <option value="">Seleciona um torneio</option>
-                {torneios.map(t => <option key={t.id} value={t.id}>{t.name} - {t.game}</option>)}
+                {torneios.map(t => <option key={t.id} value={t.id}>{t.nome} - {t.game}</option>)}
             </select>
 
             <div className="grid grid-cols-2 gap-4 mb-4">

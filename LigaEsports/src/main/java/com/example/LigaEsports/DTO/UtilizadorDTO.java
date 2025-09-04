@@ -4,7 +4,10 @@ import com.example.LigaEsports.domain.Game;
 import com.example.LigaEsports.domain.Position;
 import com.example.LigaEsports.domain.Role;
 
+import java.util.UUID;
+
 public class UtilizadorDTO {
+    private UUID id;
     public String nome;
     public String email;
     public String username;
@@ -14,6 +17,14 @@ public class UtilizadorDTO {
     public Position position;
 
     public UtilizadorDTO() {}
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
 
     public String getNome() {
         return nome;

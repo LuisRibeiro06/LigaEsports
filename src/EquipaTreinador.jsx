@@ -132,7 +132,7 @@ export default function EquipaTreinador({ treinadorId }) {
                     <option value="">Selecione um jogador</option>
                     {jogadores.map(j => (
                         <option key={j.id} value={j.id}>
-                            {j.nome} ({j.game})
+                            {j.name} ({j.tipoJogo})
                         </option>
                     ))}
                 </select>

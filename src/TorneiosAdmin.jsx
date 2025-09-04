@@ -59,7 +59,7 @@ export default function TorneiosAdmin() {
             <ul className="space-y-2">
                 {torneios.map(torneio => (
                     <li key={torneio.id} className="flex justify-between items-center border-b pb-1">
-                        <span className="text-gray-700">{torneio.name}</span>
+                        <span className="text-gray-700">{torneio.nome}</span>
                         <span className="text-gray-700 text-sm font-bold mr-2 ml-2 uppercase ">Game : {torneio.game}</span>
                         <button
                             onClick={() => apagarTorneio(torneio.id)}

@@ -32,8 +32,8 @@ export default function RegistarResultado() {
             const partida = partidas.find(p => p.id === partidaId);
             if (!partida) return;
 
-            const equipa1Id = partida.team1.id;
-            const equipa2Id = partida.team2.id;
+            const equipa1Id = partida.equipe1Id;
+            const equipa2Id = partida.equipe2Id;
 
             Promise.all([
                 api.get(`/torneios/${selectedTorneio}/equipas/${equipa1Id}/jogadores-validos`),
@@ -80,6 +80,7 @@ export default function RegistarResultado() {
 
         try {
             await api.put(`/admin/partidas/${selectedTorneio}`, payload);
+            console.log(partidas)
             setMensagem('Resultado registado com sucesso!');
         } catch (err) {
             console.error(err);
@@ -142,14 +143,14 @@ export default function RegistarResultado() {
 
             <select value={selectedTorneio} onChange={e => setSelectedTorneio(e.target.value)} className="border p-2 w-full mb-4">
                 <option value="">Seleciona um torneio</option>
-                {torneios.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
+                {torneios.map(t => <option key={t.id} value={t.id}>{t.nome}</option>)}
             </select>
 
             <select value={partidaId} onChange={e => setPartidaId(e.target.value)} className="border p-2 w-full mb-4">
                 <option value="">Seleciona uma partida</option>
                 {partidas.map(p => (
                     <option key={p.id} value={p.id}>
-                        {p.team1.nome} vs {p.team2.nome} — {new Date(p.data).toLocaleString()}
+                        {p.nomeEquipa1} vs {p.nomeEquipa2} — {new Date(p.data).toLocaleString()}
                     </option>
                 ))}
             </select>

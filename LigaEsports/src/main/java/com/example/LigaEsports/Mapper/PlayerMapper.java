@@ -82,7 +82,7 @@ public class PlayerMapper {
         return dto;
     }
 
-    public Player updateFromDTO(Player existingPlayer, PlayerUpdateDTO dto) {
+    public static Player updateFromDTO(Player existingPlayer, PlayerUpdateDTO dto) {
         // Atualizar propriedades comuns apenas se não forem nulas
         if (dto.getName() != null && !dto.getName().trim().isEmpty()) {
             existingPlayer.setNome(dto.getName());

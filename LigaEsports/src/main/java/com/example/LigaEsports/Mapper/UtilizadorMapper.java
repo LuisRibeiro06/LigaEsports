@@ -7,6 +7,7 @@ public class UtilizadorMapper {
 
     public static UtilizadorDTO toDTO(com.example.LigaEsports.domain.Utilizador utilizador) {
         UtilizadorDTO utilizadorDTO = new UtilizadorDTO();
+        utilizadorDTO.setId(utilizador.getId());
         utilizadorDTO.setNome(utilizador.getNome());
         utilizadorDTO.setEmail(utilizador.getEmail());
         utilizadorDTO.setUsername(utilizador.getUsername());
